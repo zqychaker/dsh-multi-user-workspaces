@@ -326,3 +326,37 @@ test:coverage` (host) as applicable.
 - **Single owner bootstrap**: exactly one user has `isOwner`; the owner holds the
   legacy owner-scoped cookie secret and the deployment's trust. Owner deletion
   is disallowed in v1 (fail loud).
+
+---
+
+## 9. Reference deployment (where this runs)
+
+Facts an agent on the target machine can verify, stated so nothing has to be
+rediscovered:
+
+- **DSH source checkout**: `/home/duty/deepseek-harness` (branch `master`; origin
+  is the `gh-proxy.com` mirror of `deepseek-ai/deepseek-harness` — direct TLS to
+  `github.com` is broken on this host; use
+  `GIT_SSL_CAINFO=/etc/ssl/certs/ca-certificates.crt` and keep the proxy URL).
+  Its root `AGENTS.md` owns DSH's conventions (package layout, gates, Agent
+  Notes) and applies to every phase that lands code there.
+- **Running service**: systemd user service `dsh-web.service` (`dsh web`), bound
+  to `127.0.0.1:19880`. Public exposure: Tailscale (host IP `100.93.136.126`) →
+  nginx with basic auth on 8080 → 19880. The checkout carries a local patch in
+  `packages/client/connection/src/loopback-hostname.ts` treating the Tailscale IP
+  as loopback — do not commit it upstream.
+- **`$DSH_HOME`**: `/home/duty/.dsh`. Web profile at `$DSH_HOME/profiles/web`
+  (pnpm linker `hoisted`). `dsh-remote` v0.8.13 is installed there as npm
+  `dsh-remote` (C5's extension target); mirrors under
+  `$DSH_HOME/remote-workspaces/`.
+- **State files**: workspaces in `$DSH_HOME/storages/workspace.json` (unit
+  `workspace`, version 2 today), credentials in `$DSH_HOME/.credentials.yaml`,
+  session logs in `$DSH_HOME/sessions/<normalized-cwd>/<sessionId>/session.jsonl.zstd`
+  (header = first line, `cwd` immutable).
+- **This project repo**: `/home/duty/github/dsh-multi-user-workspaces`, GitHub
+  remote `zqychaker/dsh-multi-user-workspaces` (already configured as `origin`,
+  via the gh-proxy URL).
+- **Running DSH from source** (when the service must be stopped to test a
+  patch): `cd /home/duty/deepseek-harness && node --import tsx/esm
+  apps/cli/src/bin.ts web --port 19880`; standard gates: `pnpm run test`,
+  `pnpm run test:gui`, `pnpm run test:docs`, `pnpm run typecheck`.
