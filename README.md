@@ -6,7 +6,9 @@
 
 A plugin project for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness): let several humans share one `dsh web` deployment. Each user logs in as themselves, works in **private workspaces** only they can see, and collaborates in **shared (public) workspaces** visible to everyone.
 
-The design is two documents (status: proposed, pending implementation):
+**Start here:** [DESIGN.md](DESIGN.md) — the machine-oriented project design document (target, verified current-state facts, exact component contracts, storage schema, phased plan with per-phase acceptance). Written for AI coding agents; human-facing summaries below.
+
+The design notes (status: proposed, pending implementation):
 
 - [Multi-user login with private and shared workspaces](docs/2026-09-05-multi-user-private-shared-workspaces.md) — the core: user registry, identity-carrying browser sessions, workspace ownership/visibility, actor-scoped GUI.
 - [Combining with dsh-remote: per-user remote workspaces](docs/remote-workspaces-integration.md) — on top of the core, extend [`dsh-remote`](https://github.com/flymysql/dsh-remote) so each user can register their own computer as an SSH machine and create **remote workspaces that live on their own machine**, private by default.
