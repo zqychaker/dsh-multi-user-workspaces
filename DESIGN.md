@@ -280,13 +280,13 @@ v1-cookie exception above is the single deliberate read-back compatibility.
 
 ## 6. Implementation plan (one PR per phase)
 
-| phase | deliverable | acceptance (must all pass) |
-|---|---|---|
-| **P1** | C1 `dsh-identity-users` | unit tests: create/verify/list/remove incl. case-insensitive duplicate, bad-credentials, owner bit; REAL-composition boot test; version-mismatch rejection of a v0 unit file |
-| **P2** | C2 (cookie v2, per-user secrets, login/logout routes, actor on dispatch) | owner still logs in via printed token; two users logged in simultaneously with distinct cookies; v1 cookie still authenticates as owner; deleted user's cookie 401s; `ready` item carries `userId` |
-| **P3** | C3 (entity + registry actor listing) | `list(actor)` returns own-private + all-shared; old call sites unchanged; workspace.json v2 → v3 rejects old file |
-| **P4** | C4 (session scoping, ui-login, badges, user chip) | two-browser scenario from §1: A's private invisible to B; shared visible to both; login screen before cookie; logout returns to it; `test:gui` + `DSH_SNAPSHOT=replay test:web` green |
-| **P5** | C5 (dsh-remote user-scope) | A registers laptop A, creates a remote workspace on it, agent edits files there via mirror; B sees none of A's machines/workspaces; B's `rw_connect` to A's host → `rw/machine-not-found`; deleting A removes A's machines/credentials/mirrors |
+| phase | deliverable | acceptance (must all pass) | status |
+|---|---|---|---|
+| **P1** | C1 `dsh-identity-users` | unit tests: create/verify/list/remove incl. case-insensitive duplicate, bad-credentials, owner bit; REAL-composition boot test; version-mismatch rejection of a v0 unit file | **done** — `dsh-identity-users` merged to DSH master (`e1eae67`); 19/19 unit tests + real-composition boot, 100% per-file coverage, new `docs/subsystems/identity.md` catalog page |
+| **P2** | C2 (cookie v2, per-user secrets, login/logout routes, actor on dispatch) | owner still logs in via printed token; two users logged in simultaneously with distinct cookies; v1 cookie still authenticates as owner; deleted user's cookie 401s; `ready` item carries `userId` | pending |
+| **P3** | C3 (entity + registry actor listing) | `list(actor)` returns own-private + all-shared; old call sites unchanged; workspace.json v2 → v3 rejects old file | pending |
+| **P4** | C4 (session scoping, ui-login, badges, user chip) | two-browser scenario from §1: A's private invisible to B; shared visible to both; login screen before cookie; logout returns to it; `test:gui` + `DSH_SNAPSHOT=replay test:web` green | pending |
+| **P5** | C5 (dsh-remote user-scope) | A registers laptop A, creates a remote workspace on it, agent edits files there via mirror; B sees none of A's machines/workspaces; B's `rw_connect` to A's host → `rw/machine-not-found`; deleting A removes A's machines/credentials/mirrors | pending |
 
 Per-repo hygiene for each phase (this is DSH's bar): Agent Note in the same PR,
 package README + JSDoc updated together, locale-owned UI copy, snapshot updates
